@@ -1,0 +1,24 @@
+header {
+    background-image: linear-gradient(to right, blue, darkblue);
+    width: 99%;
+}
+
+h1 {
+    color: white;
+}
+
+h2 {
+    font-weight: bold;
+}
+
+#cityInfoRow {
+    height: 32%;
+}
+
+#cityInfo {
+    width: 98%;
+}
+
+.card {
+    margin-right: 25px;
+}
