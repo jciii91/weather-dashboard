@@ -1,7 +1,8 @@
 var APIKey = "f23bbad3e37047d134e737a642d50987";
 var searchHistory = [];
 var currentCity = "";
-var todaysDate = moment().format(" (MM/DD/YYYY)");
+var momentObj = moment();
+var todaysDate = momentObj.format(" (MM/DD/YYYY)");
 
 function searchCity() {
     var city = document.getElementById("cityName").value;
@@ -22,17 +23,24 @@ function getWeather(coord) {
             console.log(data);
             document.getElementById("currentCity").innerText = currentCity + todaysDate;
             document.getElementById("weatherIcon").setAttribute("src","http://openweathermap.org/img/wn/" + data.current.weather[0].icon + "@2x.png");
-            document.getElementById("weatherIcon").setAttribute("height","45px");
+            // document.getElementById("weatherIcon").setAttribute("height","45px");
             
             let weatherData = {
                 "temp" : data.current.temp.toFixed(2),
                 "wind" : data.current.wind_speed,
                 "humidity" : data.current.humidity,
-                "uvi" : data.current.uvi
+                "uvi" : data.current.uvi,
+                "fiveday" : [
+                    data.daily[1],
+                    data.daily[2],
+                    data.daily[3],
+                    data.daily[4],
+                    data.daily[5]
+                ]
             };
             
-            console.log(weatherData);
-            showWeatherData(weatherData)
+            showWeatherData(weatherData);
+            showFiveDay(weatherData.fiveday);
     });
 }
 
@@ -51,6 +59,16 @@ function setUVIColor(uvi) {
         document.getElementById("currentUVI").setAttribute("style","background-color:orange");
     } else {
         document.getElementById("currentUVI").setAttribute("style","background-color:red");
+    }
+}
+
+function showFiveDay(fiveDayArray) {
+    var allCards = $(".card").find($(".card-body"));
+    for (var i = 0; i < fiveDayArray.length; i++) {
+        allCards[i].children[1].setAttribute("src","http://openweathermap.org/img/wn/" + fiveDayArray[i].weather[0].icon + "@2x.png");
+        allCards[i].children[2].innerText = "Temp: " + fiveDayArray[i].temp.day + " ℉";
+        allCards[i].children[3].innerText = "Wind: " + fiveDayArray[i].wind_speed + " MPH";
+        allCards[i].children[4].innerText = "Humidity: " + fiveDayArray[i].humidity + " %";
     }
 }
 
@@ -97,3 +115,8 @@ $("#primarySearch").on("click", function() {
 });
 
 document.getElementById("currentCity").innerText = todaysDate;
+var allCards = $(".card").find($(".card-body"));
+for (var i = 0; i < 5; i++) {
+    allCards[i].children[0].innerText = momentObj.add(i+1,"days").format(" MM/DD/YYYY");
+    momentObj.subtract(i+1,"days");
+}

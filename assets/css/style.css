@@ -11,8 +11,8 @@ h2 {
     font-weight: bold;
 }
 
-#cityInfoRow {
-    height: 32%;
+img {
+    height: 45px;
 }
 
 #cityInfo {
@@ -26,4 +26,8 @@ h2 {
 
 .card {
     margin-right: 25px;
+    margin-bottom: 20px;
+    color: white;
+    background-color: rgb(102, 176, 201);
+    font-weight: bold;
 }
