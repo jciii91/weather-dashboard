@@ -4,6 +4,25 @@ var currentCity = "";
 var momentObj = moment();
 var todaysDate = momentObj.format(" (MM/DD/YYYY)");
 
+function loadDates() {
+    document.getElementById("currentCity").innerText = todaysDate;
+    var allCards = $(".card").find($(".card-body"));
+    for (var i = 0; i < 5; i++) {
+        allCards[i].children[0].innerText = momentObj.add(i+1,"days").format(" MM/DD/YYYY");
+        momentObj.subtract(i+1,"days");
+    }
+}
+
+function loadHistory() {
+    if (JSON.parse(localStorage.getItem("searchHistory")) == null) {
+        return;
+    }
+    searchHistory = JSON.parse(localStorage.getItem("searchHistory"));
+    for (var i = 0; i < searchHistory.length; i++) {
+        makeHistoryButton(searchHistory[i]);
+    }
+}
+
 function searchCity() {
     var city = document.getElementById("cityName").value;
     fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=" + APIKey)
@@ -20,10 +39,8 @@ function getWeather(coord) {
     fetch("http://api.openweathermap.org/data/2.5/onecall?lat=" + coord["lat"] + "&lon=" + coord["lon"] + "&units=imperial&appid=" + APIKey)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             document.getElementById("currentCity").innerText = currentCity + todaysDate;
             document.getElementById("weatherIcon").setAttribute("src","http://openweathermap.org/img/wn/" + data.current.weather[0].icon + "@2x.png");
-            // document.getElementById("weatherIcon").setAttribute("height","45px");
             
             let weatherData = {
                 "temp" : data.current.temp.toFixed(2),
@@ -81,6 +98,10 @@ function addToHistory(cityName) {
 
     localStorage.setItem("searchHistory",JSON.stringify(searchHistory));
 
+    makeHistoryButton(cityName);
+}
+
+function makeHistoryButton(cityName) {
     buttonRow = document.createElement("div");
     buttonRow.setAttribute("class","row m-1 ml-3 mt-3 d-flex justify-content-start");
 
@@ -94,6 +115,11 @@ function addToHistory(cityName) {
 }
 
 function consolidateHistory(cityName) {
+    if(searchHistory == null) {
+        searchHistory.push(cityName);
+        return false;
+    }
+
     for (var i = 0; i < searchHistory.length; i++) {
         if (searchHistory[i] == cityName) {
             return true;
@@ -114,9 +140,10 @@ $("#primarySearch").on("click", function() {
     searchCity();
 });
 
-document.getElementById("currentCity").innerText = todaysDate;
-var allCards = $(".card").find($(".card-body"));
-for (var i = 0; i < 5; i++) {
-    allCards[i].children[0].innerText = momentObj.add(i+1,"days").format(" MM/DD/YYYY");
-    momentObj.subtract(i+1,"days");
-}
+$("#searchColumn").on("click",".historyButton", function() {
+    document.getElementById("cityName").value = this.innerText;
+    searchCity();
+});
+
+loadHistory();
+loadDates();
