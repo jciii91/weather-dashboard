@@ -23,14 +23,35 @@ function getWeather(coord) {
             document.getElementById("currentCity").innerText = currentCity + todaysDate;
             document.getElementById("weatherIcon").setAttribute("src","http://openweathermap.org/img/wn/" + data.current.weather[0].icon + "@2x.png");
             document.getElementById("weatherIcon").setAttribute("height","45px");
+            
             let weatherData = {
                 "temp" : data.current.temp.toFixed(2),
                 "wind" : data.current.wind_speed,
                 "humidity" : data.current.humidity,
-                "UVI" : data.current.uvi
+                "uvi" : data.current.uvi
             };
+            
             console.log(weatherData);
+            showWeatherData(weatherData)
     });
+}
+
+function showWeatherData(weatherData) {
+    document.getElementById("currentTemp").innerText = weatherData.temp + " ℉";
+    document.getElementById("currentWind").innerText = weatherData.wind + " MPH";
+    document.getElementById("currentHumidity").innerText = weatherData.humidity + " %";
+    setUVIColor(weatherData.uvi);
+    document.getElementById("currentUVI").innerText = weatherData.uvi;
+}
+
+function setUVIColor(uvi) {
+    if (uvi < 3) {
+        document.getElementById("currentUVI").setAttribute("style","background-color:green");
+    } else if (uvi < 8) {
+        document.getElementById("currentUVI").setAttribute("style","background-color:orange");
+    } else {
+        document.getElementById("currentUVI").setAttribute("style","background-color:red");
+    }
 }
 
 function addToHistory(cityName) {
