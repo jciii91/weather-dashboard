@@ -56,6 +56,12 @@ function consolidateHistory(cityName) {
         }
     }
 
+    if (searchHistory.length > 7) {
+        searchHistory.shift();
+        searches = document.getElementById("searchColumn");
+        searches.removeChild(searches.childNodes[7]);
+    }
+
     searchHistory.push(cityName);
     return false;
 }
