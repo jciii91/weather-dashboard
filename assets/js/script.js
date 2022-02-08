@@ -1,13 +1,15 @@
 var APIKey = "f23bbad3e37047d134e737a642d50987";
 var searchHistory = [];
+var currentCity = "";
+var todaysDate = moment().format(" (MM/DD/YYYY)");
 
 function searchCity() {
     var city = document.getElementById("cityName").value;
     fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=" + APIKey)
         .then(response => response.json())
         .then(data => {
-            //console.log(data);
             let coord = {"lat" : data[0].lat,"lon" : data[0].lon};
+            currentCity = data[0].name;
             addToHistory(data[0].name);
             getWeather(coord);
         });
@@ -17,14 +19,17 @@ function getWeather(coord) {
     fetch("http://api.openweathermap.org/data/2.5/onecall?lat=" + coord["lat"] + "&lon=" + coord["lon"] + "&units=imperial&appid=" + APIKey)
         .then(response => response.json())
         .then(data => {
-            //console.log(data);
+            console.log(data);
+            document.getElementById("currentCity").innerText = currentCity + todaysDate;
+            document.getElementById("weatherIcon").setAttribute("src","http://openweathermap.org/img/wn/" + data.current.weather[0].icon + "@2x.png");
+            document.getElementById("weatherIcon").setAttribute("height","45px");
             let weatherData = {
                 "temp" : data.current.temp.toFixed(2),
                 "wind" : data.current.wind_speed,
                 "humidity" : data.current.humidity,
                 "UVI" : data.current.uvi
             };
-            //console.log(weatherData);
+            console.log(weatherData);
     });
 }
 
@@ -69,3 +74,5 @@ function consolidateHistory(cityName) {
 $("#primarySearch").on("click", function() {
     searchCity();
 });
+
+document.getElementById("currentCity").innerText = todaysDate;
