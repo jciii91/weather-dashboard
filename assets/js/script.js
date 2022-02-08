@@ -140,6 +140,14 @@ $("#primarySearch").on("click", function() {
     searchCity();
 });
 
+$(document).on("keypress", function(key) {
+    if(key.which == 13) {
+        if (document.activeElement === document.getElementById("cityName")) {
+            searchCity();
+        }
+    }
+});
+
 $("#searchColumn").on("click",".historyButton", function() {
     document.getElementById("cityName").value = this.innerText;
     searchCity();
