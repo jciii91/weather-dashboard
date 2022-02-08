@@ -29,7 +29,7 @@ function loadHistory() {
 // gets coordinates of city to use the weather API, fires search history management function
 function searchCity() {
     var city = document.getElementById("cityName").value;
-    fetch("http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=" + APIKey)
+    fetch("https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1&appid=" + APIKey)
         .then(response => response.json())
         .then(data => {
             let coord = {"lat" : data[0].lat,"lon" : data[0].lon};
@@ -41,7 +41,7 @@ function searchCity() {
 
 // uses weather API to get weather information to be displayed
 function getWeather(coord) {
-    fetch("http://api.openweathermap.org/data/2.5/onecall?lat=" + coord["lat"] + "&lon=" + coord["lon"] + "&units=imperial&appid=" + APIKey)
+    fetch("https://api.openweathermap.org/data/2.5/onecall?lat=" + coord["lat"] + "&lon=" + coord["lon"] + "&units=imperial&appid=" + APIKey)
         .then(response => response.json())
         .then(data => {
             document.getElementById("currentCity").innerText = currentCity + todaysDate;
