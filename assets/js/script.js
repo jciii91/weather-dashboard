@@ -45,7 +45,7 @@ function getWeather(coord) {
         .then(response => response.json())
         .then(data => {
             document.getElementById("currentCity").innerText = currentCity + todaysDate;
-            document.getElementById("weatherIcon").setAttribute("src","http://openweathermap.org/img/wn/" + data.current.weather[0].icon + "@2x.png");
+            document.getElementById("weatherIcon").setAttribute("src","https://openweathermap.org/img/wn/" + data.current.weather[0].icon + "@2x.png");
             
             // object to hold weather data for city being searched for
             let weatherData = {
@@ -92,7 +92,7 @@ function setUVIColor(uvi) {
 function showFiveDay(fiveDayArray) {
     var allCards = $(".card").find($(".card-body"));
     for (var i = 0; i < fiveDayArray.length; i++) {
-        allCards[i].children[1].setAttribute("src","http://openweathermap.org/img/wn/" + fiveDayArray[i].weather[0].icon + "@2x.png");
+        allCards[i].children[1].setAttribute("src","https://openweathermap.org/img/wn/" + fiveDayArray[i].weather[0].icon + "@2x.png");
         allCards[i].children[2].innerText = "Temp: " + fiveDayArray[i].temp.day + " ℉";
         allCards[i].children[3].innerText = "Wind: " + fiveDayArray[i].wind_speed + " MPH";
         allCards[i].children[4].innerText = "Humidity: " + fiveDayArray[i].humidity + " %";
